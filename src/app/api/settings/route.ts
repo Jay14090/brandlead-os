@@ -62,28 +62,27 @@ export async function POST(request: NextRequest) {
     const data = parsed.data;
 
     // Build update data — only encrypt non-empty, non-masked keys
-    const updateData: Record<string, unknown> = {
-      openAIModel: data.openAIModel,
-      geminiModel: data.geminiModel,
-      geminiFastModel: data.geminiFastModel,
-      strictnessModeDefault: data.strictnessModeDefault,
-      maxLeadsPerSearch: data.maxLeadsPerSearch,
-      maxPagesPerLead: data.maxPagesPerLead,
-      requestDelay: data.requestDelay,
+    const updateData: any = {
+      openAIModel: body.openAIModel,
+      geminiModel: body.geminiModel,
+      geminiFastModel: body.geminiFastModel,
+      strictnessModeDefault: body.strictnessModeDefault,
+      maxLeadsPerSearch: body.maxLeadsPerSearch,
+      maxPagesPerLead: body.maxPagesPerLead,
+      requestDelay: body.requestDelay,
     };
 
-    // Only update keys if they don't contain mask characters
-    if (data.openAIKey && !data.openAIKey.includes('••')) {
-      updateData.encryptedOpenAIKey = encrypt(data.openAIKey);
+    if (body.openAIKey && !body.openAIKey.includes('••')) {
+      updateData.encryptedOpenAIKey = encrypt(body.openAIKey.trim());
     }
-    if (data.geminiKey && !data.geminiKey.includes('••')) {
-      updateData.encryptedGeminiKey = encrypt(data.geminiKey);
+    if (body.geminiKey && !body.geminiKey.includes('••')) {
+      updateData.encryptedGeminiKey = encrypt(body.geminiKey.trim());
     }
-    if (data.firecrawlKey && !data.firecrawlKey.includes('••')) {
-      updateData.encryptedFirecrawlKey = encrypt(data.firecrawlKey);
+    if (body.exaKey && !body.exaKey.includes('••')) {
+      updateData.encryptedExaKey = encrypt(body.exaKey.trim());
     }
-    if (data.exaKey && !data.exaKey.includes('••')) {
-      updateData.encryptedExaKey = encrypt(data.exaKey);
+    if (body.firecrawlKey && !body.firecrawlKey.includes('••')) {
+      updateData.encryptedFirecrawlKey = encrypt(body.firecrawlKey.trim());
     }
 
     // Clear keys if empty string provided

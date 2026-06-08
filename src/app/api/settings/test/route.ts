@@ -14,19 +14,19 @@ export async function POST(request: NextRequest) {
     const results: Record<string, { success: boolean; error?: string; model?: string }> = {};
 
     if (body.openAIKey) {
-      results.openai = await testOpenAIKey(body.openAIKey);
+      results.openai = await testOpenAIKey(body.openAIKey.trim());
     }
 
     if (body.geminiKey) {
-      results.gemini = await testGeminiKey(body.geminiKey);
+      results.gemini = await testGeminiKey(body.geminiKey.trim());
     }
 
     if (body.exaKey) {
-      results.exa = await testExaKey(body.exaKey);
+      results.exa = await testExaKey(body.exaKey.trim());
     }
 
     if (body.firecrawlKey) {
-      results.firecrawl = await testFirecrawlKey(body.firecrawlKey);
+      results.firecrawl = await testFirecrawlKey(body.firecrawlKey.trim());
     }
 
     return NextResponse.json(results);
