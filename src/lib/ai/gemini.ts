@@ -109,7 +109,7 @@ export async function testGeminiKey(apiKey: string): Promise<{ success: boolean;
 
     if (!response.ok) {
       const errorText = await response.text();
-      return { success: false, error: errorText };
+      return { success: false, error: `Key Length: ${apiKey.length}. Key Starts With: ${apiKey.substring(0, 5)}. Error: ${errorText}` };
     }
 
     const data = await response.json();
