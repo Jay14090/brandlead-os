@@ -105,8 +105,7 @@ export async function testGeminiKey(apiKey: string): Promise<{ success: boolean;
       return { success: true };
     }
     return { success: false, error: 'No response received' };
-  } catch (error: unknown) {
-    const err = error as Error;
-    return { success: false, error: err.message };
+  } catch (error: any) {
+    return { success: false, error: JSON.stringify(error, Object.getOwnPropertyNames(error)) };
   }
 }
