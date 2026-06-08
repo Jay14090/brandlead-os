@@ -1,0 +1,253 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  role      String   @default("user") // admin | user
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  jobs      SearchJob[]
+  leads     Lead[]
+}
+
+model Settings {
+  id                   Int      @id @default(1)
+  encryptedOpenAIKey   String   @default("")
+  openAIModel          String   @default("gpt-5.5")
+  encryptedGeminiKey   String   @default("")
+  geminiModel          String   @default("gemini-3.1-pro-preview")
+  geminiFastModel      String   @default("gemini-3.5-flash")
+  encryptedFirecrawlKey String  @default("")
+  encryptedExaKey      String   @default("")
+  encryptedSearchApiKey String  @default("")
+  encryptedSerpApiKey  String   @default("")
+  strictnessModeDefault String  @default("Balanced")
+  maxLeadsPerSearch    Int      @default(50)
+  maxPagesPerLead      Int      @default(4)
+  requestDelay         Int      @default(1500)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model SearchJob {
+  id                String   @id @default(uuid())
+  userId            String?
+  user              User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  brandType         String
+  location          String
+  leadCount         Int
+  companySize       String   @default("Any")
+  businessMaturity  String   @default("Any")
+  contactPreference String   @default("[]")
+  extraInstructions String   @default("")
+  strictnessMode    String   @default("Balanced")
+  searchDepth       String   @default("Balanced")
+  status            String   @default("pending")
+  progress          String   @default("{}")
+  error             String?
+  createdAt         DateTime @default(now())
+  completedAt       DateTime?
+  leads             Lead[]
+  rawEvidence       RawEvidence[]
+  companyCandidates CompanyCandidate[]
+}
+
+model RawEvidence {
+  id                 String   @id @default(uuid())
+  jobId              String
+  job                SearchJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  provider           String   // searchapi | serpapi | exa | openai | gemini | firecrawl | scraper
+  query              String?
+  resultType         String   // search_result | scraped_page | ai_grounded_answer | snippet | directory | official_page
+  title              String?
+  url                String?
+  snippet            String?
+  content            String?
+  rank               Int      @default(0)
+  providerConfidence Int      @default(0)
+  retrievedAt        DateTime @default(now())
+  notes              String?
+}
+
+model CompanyCandidate {
+  id                   String   @id @default(uuid())
+  jobId                String
+  job                  SearchJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  companyName          String
+  aliases              String   @default("[]") // JSON array
+  possibleWebsites     String   @default("[]") // JSON array
+  possibleLinkedInUrls String   @default("[]") // JSON array
+  possibleLocations    String   @default("[]") // JSON array
+  industryHints        String   @default("[]") // JSON array
+  sourceEvidenceIds    String   @default("[]") // JSON array
+  providerVotes        String   @default("{}") // JSON object
+  candidateScore       Int      @default(0)
+  notes                String?
+}
+
+model Lead {
+  id                          String   @id @default(uuid())
+  jobId                       String
+  job                         SearchJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  userId                      String?
+  user                        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // Final Lead Data Output
+  companyName                 String
+  companyNameStatus           String   @default("Candidate")
+  websiteUrl                  String?
+  websiteStatus               String   @default("Not found")
+  whatTheyDo                  String?
+  industry                    String?
+  location                    String?
+  locationStatus              String   @default("Not found")
+  companySizeEstimate         String?
+  companySizeStatus           String   @default("Not found")
+  companySizeSource           String?
+  linkedinCompanyUrl          String?
+  linkedinStatus              String   @default("Not found")
+  instagramUrl                String?
+  
+  bestDecisionMakerName       String?
+  bestDecisionMakerRole       String?
+  bestDecisionMakerStatus     String   @default("Not found")
+  bestDecisionMakerLinkedIn   String?
+  bestDecisionMakerEmail      String?
+  bestDecisionMakerPhone      String?
+  decisionMakerContactStatus  String   @default("Not found")
+  
+  companyGeneralEmail         String?
+  companyGeneralPhone         String?
+  bestOutreachRoute           String?
+  
+  painPoints                  String   @default("[]")
+  whatWeCanPitch              String?
+  suggestedOutreachAngle      String?
+  personalizedFirstLine       String?
+  
+  // Confidences
+  companyIdentityConfidence   Int      @default(0)
+  websiteConfidence           Int      @default(0)
+  contactsConfidence          Int      @default(0)
+  decisionMakerConfidence     Int      @default(0)
+  businessFitConfidence       Int      @default(0)
+  overallConfidence           Int      @default(0)
+  
+  // Quality and Notes
+  needsManualReview           Boolean  @default(false)
+  dataQualityNotes            String?
+  sourceUrls                  String   @default("[]") // JSON array
+  warnings                    String   @default("[]") // JSON array
+  conflicts                   String   @default("[]") // JSON array
+  
+  status                      String   @default("New")
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+  
+  // Relations
+  contacts                 ContactCandidate[]
+  crawledPages             CrawledPage[]
+  decisionMakers           DecisionMakerCandidate[]
+  finalLeadDecision        FinalLeadDecision?
+}
+
+model FinalLeadDecision {
+  id               String   @id @default(uuid())
+  leadId           String   @unique
+  lead             Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  finalJson        String   // Serialized FinalLeadDecision JSON
+  modelUsed        String
+  geminiReviewJson String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model ContactCandidate {
+  id                 String   @id @default(uuid())
+  leadId             String
+  lead               Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  type               String   // email | phone | linkedin | instagram | whatsapp | person | other
+  value              String
+  normalizedValue    String
+  personName         String?
+  role               String?
+  department         String?
+  contactPurpose     String?  // business_outreach | general_enquiry | support | compliance | grievance | unknown
+  sourceUrl          String?
+  sourceTitle        String?
+  sourceSnippet      String?
+  sourceEvidenceId   String?
+  extractedBy        String?  // regex | dom | ai | search_result | provider
+  confidence         Int      @default(0)
+  status             String   @default("Candidate") // Verified | Strongly Likely | Likely | Possible | Conflicting | Rejected
+  notes              String?
+  createdAt          DateTime @default(now())
+}
+
+model CrawledPage {
+  id                 String   @id @default(uuid())
+  leadId             String
+  lead               Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  url                String
+  title              String
+  pageType           String?
+  statusCode         Int      @default(200)
+  textContent        String
+  markdownContent    String?
+  sourceProvider     String   @default("scraper") // firecrawl | scraper | playwright
+  extractedAt        DateTime @default(now())
+}
+
+model DecisionMakerCandidate {
+  id                           String   @id @default(uuid())
+  leadId                       String
+  lead                         Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  personName                   String
+  normalizedPersonName         String
+  role                         String?
+  roleCategory                 String?
+  companyAssociation           String?
+  sourceUrl                    String
+  sourceTitle                  String?
+  sourceSnippet                String?
+  sourceEvidenceId             String?
+  foundByProvider              String?
+  confidence                   Int      @default(0)
+  status                       String   @default("Candidate") // Verified | Strongly Likely | Likely | Possible | Conflicting | Rejected
+  isOutreachRelevant           Boolean  @default(false)
+  notes                        String?
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+  contactEvidences             PersonContactEvidence[]
+}
+
+model PersonContactEvidence {
+  id                       String                 @id @default(uuid())
+  decisionMakerCandidateId String
+  candidate                DecisionMakerCandidate @relation(fields: [decisionMakerCandidateId], references: [id], onDelete: Cascade)
+  leadId                   String
+  personName               String?
+  companyName              String?
+  contactType              String                 // email | phone | linkedin | social | other
+  value                    String
+  normalizedValue          String
+  sourceUrl                String
+  sourceTitle              String?
+  sourceSnippet            String?
+  queryUsed                String?
+  provider                 String?
+  associationType          String   @default("unclear") // direct_person | role_based | company_general | nearby_context | unclear | unrelated
+  confidence               Int      @default(0)
+  status                   String   @default("Candidate") // Verified | Strongly Likely | Likely | Possible | Conflicting | Rejected
+  notes                    String?
+  createdAt                DateTime @default(now())
+}
