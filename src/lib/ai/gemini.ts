@@ -98,7 +98,7 @@ export async function testGeminiKey(apiKey: string): Promise<{ success: boolean;
   try {
     const client = new GoogleGenAI({ apiKey });
     const response = await client.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-flash',
       contents: 'Say "API key is valid" in exactly 4 words.',
     });
     if (response.text) {

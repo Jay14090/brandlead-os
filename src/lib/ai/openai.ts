@@ -130,9 +130,9 @@ export async function generateWithOpenAI(
 export async function testOpenAIKey(apiKey: string): Promise<{ success: boolean; error?: string; model?: string }> {
   try {
     const client = new OpenAI({ apiKey });
-    const response = await client.responses.create({
+    const response = await client.chat.completions.create({
       model: 'gpt-4o-mini',
-      input: 'Say "API key is valid" in exactly 4 words.',
+      messages: [{ role: 'user', content: 'Say "API key is valid" in exactly 4 words.' }],
     });
     return { success: true, model: response.model };
   } catch (error: unknown) {
