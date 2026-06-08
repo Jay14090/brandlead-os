@@ -22,6 +22,23 @@ export async function POST(request: NextRequest) {
 
     const data = parsed.data;
 
+    let costPerLead = 0.0144; // Default to Balanced
+    if (data.searchDepth === 'Fast') costPerLead = 0.0052;
+    else if (data.searchDepth === 'Balanced') costPerLead = 0.0144;
+    else if (data.searchDepth === 'Deep') costPerLead = 0.036;
+
+    const estimatedCost = costPerLead * data.leadCount;
+
+    const user = await prisma.user.findUnique({ where: { id: session.userId } });
+    if (!user || user.credits < estimatedCost) {
+      return NextResponse.json({ error: 'Your credits are over. Contact admin for top up.' }, { status: 403 });
+    }
+
+    await prisma.user.update({
+      where: { id: session.userId },
+      data: { credits: { decrement: estimatedCost } }
+    });
+
     const job = await prisma.searchJob.create({
       data: {
         userId: session.userId,

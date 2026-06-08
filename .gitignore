@@ -44,3 +44,9 @@ dev.db-journal
 tunnel.txt
 tunnel_url.txt
 start-tunnel.js
+# Local Netlify folder
+.netlify
+
+test-*.js
+test-*.ts
+src/lib/ai/test-*.ts

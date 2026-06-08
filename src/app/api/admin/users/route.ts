@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
         id: true,
         username: true,
         role: true,
+        credits: true,
         isActive: true,
         createdAt: true,
         _count: {
@@ -62,6 +63,7 @@ export async function POST(request: NextRequest) {
         id: true,
         username: true,
         role: true,
+        credits: true,
         isActive: true,
         createdAt: true,
         _count: { select: { jobs: true, leads: true } }
@@ -100,6 +102,7 @@ export async function PATCH(request: NextRequest) {
         id: true,
         username: true,
         role: true,
+        credits: true,
         isActive: true,
         createdAt: true,
         _count: { select: { jobs: true, leads: true } }

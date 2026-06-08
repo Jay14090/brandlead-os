@@ -770,7 +770,6 @@ export type SearchJobCreateOrConnectWithoutUserInput = {
 
 export type SearchJobCreateManyUserInputEnvelope = {
   data: Prisma.SearchJobCreateManyUserInput | Prisma.SearchJobCreateManyUserInput[]
-  skipDuplicates?: boolean
 }
 
 export type SearchJobUpsertWithWhereUniqueWithoutUserInput = {
@@ -2038,7 +2037,6 @@ export type SearchJobCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many SearchJobs.
    */
   data: Prisma.SearchJobCreateManyInput | Prisma.SearchJobCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -2057,7 +2055,6 @@ export type SearchJobCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many SearchJobs.
    */
   data: Prisma.SearchJobCreateManyInput | Prisma.SearchJobCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

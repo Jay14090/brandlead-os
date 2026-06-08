@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AGENCY_SERVICES } from '@/lib/constants';
 
@@ -8,6 +8,16 @@ export default function NewSearchPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [credits, setCredits] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch('/api/user/credits')
+      .then(res => res.json())
+      .then(data => {
+        if (data.credits !== undefined) setCredits(data.credits);
+      })
+      .catch(console.error);
+  }, []);
 
   const [formData, setFormData] = useState({
     brandType: 'E-commerce Brands',
@@ -21,8 +31,20 @@ export default function NewSearchPage() {
     strictnessMode: 'Balanced',
   });
 
+  const getCostPerLead = () => {
+    if (formData.searchDepth === 'Fast') return 0.0052;
+    if (formData.searchDepth === 'Balanced') return 0.0144;
+    if (formData.searchDepth === 'Deep') return 0.036;
+    return 0.0144;
+  };
+  const estimatedCost = getCostPerLead() * formData.leadCount;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (credits !== null && estimatedCost > credits) {
+      setError('Your credits are over. Contact admin for top up.');
+      return;
+    }
     setLoading(true);
     setError('');
 
@@ -246,8 +268,18 @@ export default function NewSearchPage() {
           </div>
         )}
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <button type="submit" className="btn-primary" disabled={loading} style={{ padding: '0.75rem 2rem', fontSize: '1rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem' }}>
+          {credits !== null && (
+            <div style={{ fontSize: '0.875rem', color: credits >= estimatedCost ? 'var(--text-muted)' : 'var(--accent-red)' }}>
+              Estimated cost: ${estimatedCost.toFixed(2)} (Available: ${credits.toFixed(2)})
+            </div>
+          )}
+          <button 
+            type="submit" 
+            className="btn-primary" 
+            disabled={loading || (credits !== null && credits < estimatedCost)} 
+            style={{ padding: '0.75rem 2rem', fontSize: '1rem', opacity: (credits !== null && credits < estimatedCost) ? 0.5 : 1 }}
+          >
             {loading ? (
               <>
                 <span className="animate-spin" style={{ display: 'inline-block', width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%' }} />

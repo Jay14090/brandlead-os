@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 const defaultNavItems = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊' },
@@ -11,6 +12,16 @@ const defaultNavItems = [
 
 export default function AppShell({ children, role = 'user' }: { children: React.ReactNode, role?: string }) {
   const pathname = usePathname();
+  const [credits, setCredits] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch('/api/user/credits')
+      .then(res => res.json())
+      .then(data => {
+        if (data.credits !== undefined) setCredits(data.credits);
+      })
+      .catch(console.error);
+  }, [pathname]);
 
   let navItems = [];
   if (role === 'admin') {
@@ -91,6 +102,20 @@ export default function AppShell({ children, role = 'user' }: { children: React.
             );
           })}
         </nav>
+
+        {credits !== null && role === 'user' && (
+          <div style={{ padding: '0.75rem 1.25rem', borderTop: '1px solid var(--border-subtle)' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.25rem' }}>Available Budget</div>
+            <div style={{ fontSize: '1rem', fontWeight: 600, color: credits > 0 ? 'var(--accent-green)' : 'var(--accent-red)' }}>
+              ${credits.toFixed(2)}
+            </div>
+            {credits <= 0 && (
+              <div style={{ fontSize: '0.6875rem', color: 'var(--accent-red)', marginTop: '0.25rem' }}>
+                Contact admin for top up
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Footer */}
         <div style={{

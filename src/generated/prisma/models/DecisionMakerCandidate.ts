@@ -764,7 +764,6 @@ export type DecisionMakerCandidateCreateOrConnectWithoutLeadInput = {
 
 export type DecisionMakerCandidateCreateManyLeadInputEnvelope = {
   data: Prisma.DecisionMakerCandidateCreateManyLeadInput | Prisma.DecisionMakerCandidateCreateManyLeadInput[]
-  skipDuplicates?: boolean
 }
 
 export type DecisionMakerCandidateUpsertWithWhereUniqueWithoutLeadInput = {
@@ -1824,7 +1823,6 @@ export type DecisionMakerCandidateCreateManyArgs<ExtArgs extends runtime.Types.E
    * The data used to create many DecisionMakerCandidates.
    */
   data: Prisma.DecisionMakerCandidateCreateManyInput | Prisma.DecisionMakerCandidateCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1843,7 +1841,6 @@ export type DecisionMakerCandidateCreateManyAndReturnArgs<ExtArgs extends runtim
    * The data used to create many DecisionMakerCandidates.
    */
   data: Prisma.DecisionMakerCandidateCreateManyInput | Prisma.DecisionMakerCandidateCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

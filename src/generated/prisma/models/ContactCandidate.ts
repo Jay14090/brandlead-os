@@ -736,7 +736,6 @@ export type ContactCandidateCreateOrConnectWithoutLeadInput = {
 
 export type ContactCandidateCreateManyLeadInputEnvelope = {
   data: Prisma.ContactCandidateCreateManyLeadInput | Prisma.ContactCandidateCreateManyLeadInput[]
-  skipDuplicates?: boolean
 }
 
 export type ContactCandidateUpsertWithWhereUniqueWithoutLeadInput = {
@@ -1659,7 +1658,6 @@ export type ContactCandidateCreateManyArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many ContactCandidates.
    */
   data: Prisma.ContactCandidateCreateManyInput | Prisma.ContactCandidateCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1678,7 +1676,6 @@ export type ContactCandidateCreateManyAndReturnArgs<ExtArgs extends runtime.Type
    * The data used to create many ContactCandidates.
    */
   data: Prisma.ContactCandidateCreateManyInput | Prisma.ContactCandidateCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

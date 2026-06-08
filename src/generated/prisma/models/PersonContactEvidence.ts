@@ -736,7 +736,6 @@ export type PersonContactEvidenceCreateOrConnectWithoutCandidateInput = {
 
 export type PersonContactEvidenceCreateManyCandidateInputEnvelope = {
   data: Prisma.PersonContactEvidenceCreateManyCandidateInput | Prisma.PersonContactEvidenceCreateManyCandidateInput[]
-  skipDuplicates?: boolean
 }
 
 export type PersonContactEvidenceUpsertWithWhereUniqueWithoutCandidateInput = {
@@ -1659,7 +1658,6 @@ export type PersonContactEvidenceCreateManyArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many PersonContactEvidences.
    */
   data: Prisma.PersonContactEvidenceCreateManyInput | Prisma.PersonContactEvidenceCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1678,7 +1676,6 @@ export type PersonContactEvidenceCreateManyAndReturnArgs<ExtArgs extends runtime
    * The data used to create many PersonContactEvidences.
    */
   data: Prisma.PersonContactEvidenceCreateManyInput | Prisma.PersonContactEvidenceCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

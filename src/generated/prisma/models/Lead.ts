@@ -1555,7 +1555,6 @@ export type LeadCreateOrConnectWithoutUserInput = {
 
 export type LeadCreateManyUserInputEnvelope = {
   data: Prisma.LeadCreateManyUserInput | Prisma.LeadCreateManyUserInput[]
-  skipDuplicates?: boolean
 }
 
 export type LeadUpsertWithWhereUniqueWithoutUserInput = {
@@ -1734,7 +1733,6 @@ export type LeadCreateOrConnectWithoutJobInput = {
 
 export type LeadCreateManyJobInputEnvelope = {
   data: Prisma.LeadCreateManyJobInput | Prisma.LeadCreateManyJobInput[]
-  skipDuplicates?: boolean
 }
 
 export type LeadUpsertWithWhereUniqueWithoutJobInput = {
@@ -4060,7 +4058,6 @@ export type LeadCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * The data used to create many Leads.
    */
   data: Prisma.LeadCreateManyInput | Prisma.LeadCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -4079,7 +4076,6 @@ export type LeadCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many Leads.
    */
   data: Prisma.LeadCreateManyInput | Prisma.LeadCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

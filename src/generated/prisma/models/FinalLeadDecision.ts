@@ -1174,7 +1174,6 @@ export type FinalLeadDecisionCreateManyArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many FinalLeadDecisions.
    */
   data: Prisma.FinalLeadDecisionCreateManyInput | Prisma.FinalLeadDecisionCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1193,7 +1192,6 @@ export type FinalLeadDecisionCreateManyAndReturnArgs<ExtArgs extends runtime.Typ
    * The data used to create many FinalLeadDecisions.
    */
   data: Prisma.FinalLeadDecisionCreateManyInput | Prisma.FinalLeadDecisionCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

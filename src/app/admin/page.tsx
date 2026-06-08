@@ -79,6 +79,31 @@ export default function AdminPage() {
     }
   };
 
+  const handleAddCredits = async (id: string) => {
+    const amountStr = prompt('Enter amount of credits to add (e.g. 10 or -5):');
+    if (!amountStr) return;
+    const amount = parseFloat(amountStr);
+    if (isNaN(amount)) return alert('Invalid amount');
+
+    try {
+      const res = await fetch(`/api/admin/users/${id}/credits`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount }),
+      });
+      
+      if (res.ok) {
+        const updatedUser = await res.json();
+        setUsers(users.map(u => u.id === id ? { ...u, credits: updatedUser.credits } : u));
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Failed to update credits');
+      }
+    } catch (err) {
+      alert('Network error');
+    }
+  };
+
   const handleScrapLeads = async () => {
     if (!confirm('Are you sure you want to permanently delete all leads with less than 50% confidence across all users? This cannot be undone.')) return;
     
@@ -203,6 +228,7 @@ export default function AdminPage() {
                 <tr>
                   <th>User</th>
                   <th>Role</th>
+                  <th>Credits</th>
                   <th>Activity</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -219,6 +245,18 @@ export default function AdminPage() {
                       <span className={user.role === 'admin' ? 'badge badge-purple' : 'badge badge-gray'}>
                         {user.role}
                       </span>
+                    </td>
+                    <td>
+                      <div style={{ fontWeight: 600, color: 'var(--accent-green)' }}>
+                        ${(user.credits || 0).toFixed(2)}
+                      </div>
+                      <button 
+                        onClick={() => handleAddCredits(user.id)}
+                        className="btn-ghost"
+                        style={{ padding: '0.125rem 0.25rem', fontSize: '0.75rem', marginTop: '0.25rem' }}
+                      >
+                        ± Adjust
+                      </button>
                     </td>
                     <td>
                       <div style={{ fontSize: '0.875rem' }}>
