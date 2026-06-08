@@ -95,17 +95,33 @@ export async function verifyWithGemini(
  * Test Gemini API key connectivity
  */
 export async function testGeminiKey(apiKey: string): Promise<{ success: boolean; error?: string }> {
+  const originalFetch = globalThis.fetch;
+  let capturedRequest: any = null;
+  
+  globalThis.fetch = async (url, options) => {
+    capturedRequest = { url, method: options?.method, headers: options?.headers };
+    return originalFetch(url, options);
+  };
+
   try {
-    const client = new GoogleGenAI({ apiKey });
+    const client = new GoogleGenAI({ apiKey, httpOptions: { baseUrl: 'https://generativelanguage.googleapis.com' } });
     const response = await client.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: 'Say "API key is valid" in exactly 4 words.',
     });
+    globalThis.fetch = originalFetch;
     if (response.text) {
       return { success: true };
     }
     return { success: false, error: 'No response received' };
   } catch (error: any) {
-    return { success: false, error: JSON.stringify(error, Object.getOwnPropertyNames(error)) };
+    globalThis.fetch = originalFetch;
+    const errorBody = {
+      message: error.message,
+      capturedUrl: capturedRequest?.url,
+      capturedHeaders: capturedRequest?.headers,
+      rawError: JSON.stringify(error, Object.getOwnPropertyNames(error))
+    };
+    return { success: false, error: JSON.stringify(errorBody, null, 2) };
   }
 }
