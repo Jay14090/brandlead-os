@@ -544,6 +544,7 @@ export type CrawledPageCreateOrConnectWithoutLeadInput = {
 
 export type CrawledPageCreateManyLeadInputEnvelope = {
   data: Prisma.CrawledPageCreateManyLeadInput | Prisma.CrawledPageCreateManyLeadInput[]
+  skipDuplicates?: boolean
 }
 
 export type CrawledPageUpsertWithWhereUniqueWithoutLeadInput = {
@@ -1378,6 +1379,7 @@ export type CrawledPageCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many CrawledPages.
    */
   data: Prisma.CrawledPageCreateManyInput | Prisma.CrawledPageCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1396,6 +1398,7 @@ export type CrawledPageCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many CrawledPages.
    */
   data: Prisma.CrawledPageCreateManyInput | Prisma.CrawledPageCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

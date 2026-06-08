@@ -592,6 +592,7 @@ export type CompanyCandidateCreateOrConnectWithoutJobInput = {
 
 export type CompanyCandidateCreateManyJobInputEnvelope = {
   data: Prisma.CompanyCandidateCreateManyJobInput | Prisma.CompanyCandidateCreateManyJobInput[]
+  skipDuplicates?: boolean
 }
 
 export type CompanyCandidateUpsertWithWhereUniqueWithoutJobInput = {
@@ -1448,6 +1449,7 @@ export type CompanyCandidateCreateManyArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many CompanyCandidates.
    */
   data: Prisma.CompanyCandidateCreateManyInput | Prisma.CompanyCandidateCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1466,6 +1468,7 @@ export type CompanyCandidateCreateManyAndReturnArgs<ExtArgs extends runtime.Type
    * The data used to create many CompanyCandidates.
    */
   data: Prisma.CompanyCandidateCreateManyInput | Prisma.CompanyCandidateCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

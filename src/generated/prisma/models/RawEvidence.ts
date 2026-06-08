@@ -622,6 +622,7 @@ export type RawEvidenceCreateOrConnectWithoutJobInput = {
 
 export type RawEvidenceCreateManyJobInputEnvelope = {
   data: Prisma.RawEvidenceCreateManyJobInput | Prisma.RawEvidenceCreateManyJobInput[]
+  skipDuplicates?: boolean
 }
 
 export type RawEvidenceUpsertWithWhereUniqueWithoutJobInput = {
@@ -1489,6 +1490,7 @@ export type RawEvidenceCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many RawEvidences.
    */
   data: Prisma.RawEvidenceCreateManyInput | Prisma.RawEvidenceCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1507,6 +1509,7 @@ export type RawEvidenceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many RawEvidences.
    */
   data: Prisma.RawEvidenceCreateManyInput | Prisma.RawEvidenceCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
